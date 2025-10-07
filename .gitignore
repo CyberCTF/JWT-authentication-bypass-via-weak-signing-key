@@ -8,7 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# build/  # Commented out because we need our build/ folder for the app
 develop-eggs/
 dist/
 downloads/

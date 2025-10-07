@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}InventoryPro - Login{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-blue-400 mb-2">InventoryPro</h1>
+            <h2 class="text-xl text-gray-300">Enterprise Asset Management</h2>
+            <p class="mt-2 text-sm text-gray-400">Sign in to your account</p>
+        </div>
+        
+        <div class="glass rounded-lg p-8">
+            {% if error %}
+            <div class="bg-red-900/50 border border-red-500/50 text-red-200 px-4 py-3 rounded mb-6" role="alert">
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/login" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                    <input type="text" id="username" name="username" required 
+                           value="manager" readonly
+                           class="w-full px-3 py-2 bg-gray-700 border border-slate-500 rounded-md text-gray-300 cursor-not-allowed"
+                           placeholder="Enter your username">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                    <input type="password" id="password" name="password" required 
+                           value="supply2024" readonly
+                           class="w-full px-3 py-2 bg-gray-700 border border-slate-500 rounded-md text-gray-300 cursor-not-allowed"
+                           placeholder="Enter your password">
+                </div>
+                
+                <div class="bg-blue-900/20 border border-blue-500/30 rounded-md p-4">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="text-sm font-medium text-blue-300">Active Session Available</h3>
+                            <p class="text-xs text-blue-200 mt-1">Your credentials are pre-filled. Click "Sign In" to access the dashboard.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-dark-900 shadow-lg">
+                    <div class="flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013 3v1"></path>
+                        </svg>
+                        Sign In to Dashboard
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

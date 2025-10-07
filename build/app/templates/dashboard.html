@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - InventoryPro{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Inventory Dashboard</h1>
+                <p class="mt-2 text-gray-400">Welcome back, <span class="text-blue-400 font-medium">{{ username }}</span>. Role: <span class="text-blue-400 font-medium">{{ role.title() }}</span></p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="text-sm text-gray-400">System Status</p>
+                    <div class="flex items-center mt-1">
+                        <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                        <span class="text-sm text-green-400 font-medium">Online</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-400">Last Update</p>
+                    <p class="text-sm text-white font-medium" id="currentTime"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="glass rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-2 bg-blue-600/20 rounded-lg">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-400">Total Items</p>
+                    <p class="text-2xl font-bold text-white">{{ items|length }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-2 bg-green-600/20 rounded-lg">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-400">Available</p>
+                    <p class="text-2xl font-bold text-white">{{ items|selectattr("status", "equalto", "available")|list|length }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-2 bg-yellow-600/20 rounded-lg">
+                    <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-400">Reserved</p>
+                    <p class="text-2xl font-bold text-white">{{ items|selectattr("status", "equalto", "reserved")|list|length }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-2 bg-purple-600/20 rounded-lg">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-400">Locations</p>
+                    <p class="text-2xl font-bold text-white">{{ items|map(attribute='location')|unique|list|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass rounded-lg">
+        <div class="px-6 py-4 border-b border-slate-700/50">
+            <h2 class="text-xl font-semibold text-white">Inventory Items</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-700/50">
+                <thead class="bg-dark-800/50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Item</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Quantity</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Location</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700/50">
+                    {% for item in items %}
+                    <tr class="hover:bg-dark-800/30 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-white">{{ item.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-600/20 text-blue-300">
+                                {{ item.category }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ item.quantity }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ item.location }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if item.status == 'available' %}
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-600/20 text-green-300">
+                                Available
+                            </span>
+                            {% else %}
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-600/20 text-yellow-300">
+                                Reserved
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if role == 'admin' %}
+    <div class="mt-8 p-6 bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/30 rounded-lg">
+        <div class="flex items-center">
+            <div class="p-3 bg-blue-600/20 rounded-lg mr-4">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-lg font-semibold text-white">Administrator Access Detected</h3>
+                <p class="text-blue-300 text-sm mt-1">
+                    You have elevated privileges. Access the 
+                    <a href="/admin" class="underline hover:text-blue-200 font-medium">Administration Panel</a> 
+                    for critical asset management and user administration.
+                </p>
+            </div>
+            <div class="ml-4">
+                <a href="/admin" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                    Admin Panel
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', { 
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    document.getElementById('currentTime').textContent = timeString;
+}
+
+// Update time immediately and then every second
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+{% endblock %}
