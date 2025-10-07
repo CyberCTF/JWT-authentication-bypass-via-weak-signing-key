@@ -1,0 +1,87 @@
+{
+  "lab_name": "JWT Authentication Bypass via Weak Signing Key",
+  "lab_type": "Web Application Security",
+  "difficulty": "Intermediate",
+  "estimated_time": "30-45 minutes",
+  "technology_stack": {
+    "backend": "Flask 2.3.3",
+    "frontend": "TailwindCSS",
+    "authentication": "PyJWT",
+    "deployment": "Docker"
+  },
+  "vulnerability_type": "Authentication Bypass",
+  "owasp_category": "A07:2021 – Identification and Authentication Failures",
+  "cve_references": [],
+  "learning_objectives": [
+    "Identify JWT tokens in web applications",
+    "Recognize weak JWT signing implementations",
+    "Use hashcat for JWT secret cracking",
+    "Forge JWT tokens with elevated privileges",
+    "Access unauthorized administrative functions",
+    "Understand JWT security best practices"
+  ],
+  "attack_vectors": [
+    "JWT Secret Brute Force",
+    "Token Forgery",
+    "Privilege Escalation",
+    "Authentication Bypass"
+  ],
+  "tools_required": [
+    "Burp Suite",
+    "JWT Editor Extension",
+    "Hashcat",
+    "Web Browser",
+    "Docker"
+  ],
+  "flags": {
+    "primary": "CYBER{JWT_w34k_s1gn1ng_k3y_cr4ck3d}",
+    "secondary": "CYBER{adm1n_4cc3ss_gr4nt3d}"
+  },
+  "credentials": {
+    "manager": {
+      "username": "manager",
+      "password": "supply2024",
+      "role": "manager"
+    },
+    "supervisor": {
+      "username": "supervisor", 
+      "password": "inventory!",
+      "role": "supervisor"
+    }
+  },
+  "vulnerable_endpoints": [
+    "/admin",
+    "/admin/delete"
+  ],
+  "weak_secret": "admin123",
+  "jwt_algorithm": "HS256",
+  "deployment": {
+    "port": 3206,
+    "container": "inventorypro",
+    "health_check": true
+  },
+  "documentation": [
+    "docs/lab-guide.md",
+    "docs/technical-docs.md",
+    "docs/user-guide.md",
+    "deploy/README.md"
+  ],
+  "testing": {
+    "automated_tests": "test/test_app.py",
+    "exploit_script": "test/exploit.py",
+    "wordlist": "test/jwt.secrets.list"
+  },
+  "remediation": [
+    "Use cryptographically strong signing keys",
+    "Implement proper key rotation",
+    "Use RSA or ECDSA algorithms where appropriate",
+    "Implement secret management systems",
+    "Regular security assessments"
+  ],
+  "business_context": {
+    "application_name": "InventoryPro",
+    "application_type": "Enterprise Asset Management",
+    "theme": "Dark mode with glassmorphism",
+    "ui_framework": "TailwindCSS"
+  }
+}

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  jwt-auth-bypass:
+    build:
+      context: ./build/app
+      dockerfile: Dockerfile
+    container_name: jwt-auth-bypass-prod
+    ports:
+      - "3206:3206"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3206/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - cyberctf-network
+
+networks:
+  cyberctf-network:
+    driver: bridge
