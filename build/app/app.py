@@ -71,6 +71,33 @@ def login():
     
     return render_template('login.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Vérifier si l'utilisateur existe déjà
+        if username in users:
+            return render_template('register.html', error="Username already exists")
+        
+        # Créer le nouvel utilisateur (rôle par défaut: analyst)
+        users[username] = {
+            "password": password, 
+            "role": "analyst", 
+            "full_name": f"User {username.title()}", 
+            "department": "General", 
+            "email": f"{username}@inventorypro.com"
+        }
+        
+        # Rediriger vers la page de connexion avec un message de succès
+        # et supprimer tout cookie de session existant
+        response = make_response(render_template('login.html', success="Account created successfully! Please login."))
+        response.set_cookie('session', '', expires=0)  # Supprimer le cookie de session
+        return response
+    
+    return render_template('register.html')
+
 @app.route('/dashboard')
 def dashboard():
     token = request.cookies.get('session')

@@ -30,19 +30,91 @@
     </script>
     <style>
         .glass {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(148, 163, 184, 0.2);
+            border: 1px solid rgba(75, 85, 99, 0.3);
         }
         .glass-light {
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
+        
+        /* Animation de fond moderne */
+        .animated-bg {
+            background: linear-gradient(-45deg, #000000, #0a0a0a, #111111, #0d1117);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Particules flottantes */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Effet de lueur subtile */
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
         }
     </style>
+    <script>
+        // Créer des particules flottantes
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.appendChild(particlesContainer);
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        });
+    </script>
 </head>
-<body class="bg-gradient-to-br from-dark-900 via-slate-900 to-dark-800 min-h-screen text-white">
-    {% if request.endpoint != 'login' and request.endpoint != 'index' %}
+<body class="animated-bg min-h-screen text-white relative">
+    {% if request.endpoint != 'login' and request.endpoint != 'index' and request.endpoint != 'register' %}
     <nav class="glass border-b border-slate-700/50 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
